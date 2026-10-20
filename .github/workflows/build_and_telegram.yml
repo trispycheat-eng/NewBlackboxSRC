@@ -21,38 +21,38 @@ jobs:
 
     - name: Rename BlackBox to Samsung Security
       run: |
-        echo "Replacing package strings inside all source files..."
-        find . -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackboxa/com.samsung.android.security/g' {} +
-        find . -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackbox/com.samsung.android.security/g' {} +
+        echo "Replacing APP package strings..."
+        find app/ -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackboxa/com.samsung.android.security/g' {} +
+        
+        echo "Replacing CORE package strings..."
+        find Bcore/ -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackbox/com.samsung.android.security.core/g' {} +
+        
+        echo "Replacing C++ JNI strings..."
         find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackboxa/com\/samsung\/android\/security/g' {} +
-        find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackbox/com\/samsung\/android\/security/g' {} +
+        find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackbox/com\/samsung\/android\/security\/core/g' {} +
         
         echo "Replacing library loader name..."
         find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackbox")/loadLibrary("system_util")/g' {} +
         find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackboxa")/loadLibrary("system_util")/g' {} +
         
-        echo "Forcing Manifest package updates..."
-        # Force the Bcore manifest to use the new package
-        if [ -f "Bcore/src/main/AndroidManifest.xml" ]; then
-          sed -i 's/package="top\.niunaijun\.blackbox[^"]*"/package="com.samsung.android.security"/g' Bcore/src/main/AndroidManifest.xml
-        fi
-
-        echo "Moving Java folders to match new package name..."
-        if [ -d "Bcore/src/main/java/top" ]; then
-          mkdir -p Bcore/src/main/java/com/samsung/android
-          mv Bcore/src/main/java/top/niunaijun/blackbox Bcore/src/main/java/com/samsung/android/security
-          rm -rf Bcore/src/main/java/top
-        fi
+        echo "Moving APP folders..."
         if [ -d "app/src/main/java/top" ]; then
           mkdir -p app/src/main/java/com/samsung/android
           mv app/src/main/java/top/niunaijun/blackboxa app/src/main/java/com/samsung/android/security
           rm -rf app/src/main/java/top
         fi
 
-        echo "Moving AIDL folders to match new package name..."
+        echo "Moving CORE folders..."
+        if [ -d "Bcore/src/main/java/top" ]; then
+          mkdir -p Bcore/src/main/java/com/samsung/android/security
+          mv Bcore/src/main/java/top/niunaijun/blackbox Bcore/src/main/java/com/samsung/android/security/core
+          rm -rf Bcore/src/main/java/top
+        fi
+
+        echo "Moving AIDL folders..."
         if [ -d "Bcore/src/main/aidl/top" ]; then
-          mkdir -p Bcore/src/main/aidl/com/samsung/android
-          mv Bcore/src/main/aidl/top/niunaijun/blackbox Bcore/src/main/aidl/com/samsung/android/security
+          mkdir -p Bcore/src/main/aidl/com/samsung/android/security
+          mv Bcore/src/main/aidl/top/niunaijun/blackbox Bcore/src/main/aidl/com/samsung/android/security/core
           rm -rf Bcore/src/main/aidl/top
         fi
 
