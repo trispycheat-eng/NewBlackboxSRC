@@ -43,6 +43,12 @@ jobs:
           rm -rf app/src/main/java/top
         fi
 
+        echo "Fixing Resource Path issue..."
+        mkdir -p app/src/main/res/layout
+        if [ ! -f app/src/main/res/layout/activity_list.xml ]; then
+          echo '<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" />' > app/src/main/res/layout/activity_list.xml
+        fi
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
