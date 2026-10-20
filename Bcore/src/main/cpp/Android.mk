@@ -16,7 +16,6 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := system_util
 
-# IMPORTANT: Make sure SandboxBypass.cpp is in this exact list
 LOCAL_SRC_FILES := BoxCore.cpp \
     hidden_api.cpp \
     IO.cpp \
@@ -26,7 +25,6 @@ LOCAL_SRC_FILES := BoxCore.cpp \
     Utils/VirtualSpoof.cpp \
     Utils/HexDump.cpp \
     Utils/AntiDetection.cpp \
-    Hook/VmClassLoaderHook.cpp \
     Hook/UnixFileSystemHook.cpp \
     Hook/BinderHook.cpp \
     Hook/BaseHook.cpp \
@@ -35,7 +33,7 @@ LOCAL_SRC_FILES := BoxCore.cpp \
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
 LOCAL_CFLAGS += -Wno-error=format-security -fvisibility=hidden -ffunction-sections -fdata-sections -w -std=c++17
-LOCAL_CPPFLAGS += -Wno-error=format-security -fvisibility=hidden -ffunction-sections -fdata-sections -w -Werror -fms-extensions
+LOCAL_CPPFLAGS += -Wno-error=format-security -fvisibility=hidden -ffunction-sections -fdata-sections -w -fms-extensions
 LOCAL_LDFLAGS += -Wl,--gc-sections,--strip-all
 LOCAL_ARM_MODE := arm
 LOCAL_CPP_FEATURES := exceptions
