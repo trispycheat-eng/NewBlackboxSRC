@@ -1,10 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    // CHANGED TO .core SO IT DOESN'T CLASH WITH THE APP
     namespace 'com.samsung.android.security.core' 
-
     compileSdk rootProject.ext.compileSdkVersion
+    
+    // THIS IS THE MAGIC LINE: Forces NDK 21 instead of modern NDK 26
+    ndkVersion "21.4.7075529"
 
     aidlPackageWhiteList "android/app/IServiceConnection.aidl"
     aidlPackageWhiteList "android/accounts/IAccountManagerResponse.aidl"
