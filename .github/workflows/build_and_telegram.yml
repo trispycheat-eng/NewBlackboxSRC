@@ -34,8 +34,7 @@ jobs:
         git clone https://github.com/CodingGay/BlackReflection.git
         cd BlackReflection
         
-        echo "Patching build.gradle files to remove dead plugins..."
-        # Remove the ancient Maven plugin that breaks modern Gradle
+        echo "Patching build.gradle files..."
         sed -i '/com.github.dcendents.android-maven/d' build.gradle
         sed -i '/com.github.dcendents.android-maven/d' core/build.gradle
         sed -i '/com.github.dcendents.android-maven/d' compiler/build.gradle
@@ -43,17 +42,22 @@ jobs:
         sed -i '/com.jfrog.bintray/d' core/build.gradle
         sed -i '/com.jfrog.bintray/d' compiler/build.gradle
         
-        echo "Building AAR and JAR..."
+        echo "Building AAR and JAR (using 'gradle assemble')..."
         chmod +x gradlew
-        # Use the global gradle 7.5 we set up, not their old wrapper
-        gradle :core:assembleRelease :compiler:assemble --no-daemon --stacktrace
+        # Use generic assemble instead of assembleRelease
+        gradle assemble --no-daemon --stacktrace
         
         echo "Copying built files to Bcore/libs..."
         cd ..
         mkdir -p Bcore/libs
-        find BlackReflection -name "core-release.aar" -exec cp {} Bcore/libs/core.aar \;
-        find BlackReflection -name "compiler.jar" -exec cp {} Bcore/libs/compiler.jar \;
         
+        # Find the AAR file (usually in core/build/outputs/aar/)
+        find BlackReflection -name "*.aar" -path "*core*" -exec cp {} Bcore/libs/core.aar \;
+        
+        # Find the JAR file (usually in compiler/build/libs/)
+        find BlackReflection -name "*.jar" -path "*compiler*" -not -name "*sources*" -not -name "*javadoc*" -exec cp {} Bcore/libs/compiler.jar \;
+        
+        echo "Files copied:"
         ls -la Bcore/libs/
 
     - name: Rename BlackBox to Samsung Security
