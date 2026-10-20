@@ -51,11 +51,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Debug APK (Filtering Errors)
-      run: |
-        ./gradlew assembleDebug --no-daemon > build_log.txt 2>&1 || true
-        echo "=============== ERROR LOG ==============="
-        grep -i -E "error:|what went wrong|Caused by:" build_log.txt -A 5 -B 2 || echo "No specific error found, check full log."
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
