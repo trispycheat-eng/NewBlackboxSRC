@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    // 1. CHANGED PACKAGE NAME (Camouflage)
-    namespace 'com.samsung.android.security'
+    // CHANGED TO .core SO IT DOESN'T CLASH WITH THE APP
+    namespace 'com.samsung.android.security.core' 
 
     compileSdk rootProject.ext.compileSdkVersion
 
@@ -28,7 +28,6 @@ android {
 
     buildTypes {
         release {
-            // 2. MUST BE FALSE TO PREVENT STRIPPING JNI HOOKS
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -39,15 +38,12 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
-    
-    // 3. REMOVED: ndkVersion = "29.0.13846066" (GitHub Actions doesn't have it)
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // Enable incremental annotation processing for faster builds
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:-deprecation" << "-Xlint:-unchecked" << "-Xlint:-rawtypes"
         options.fork = true
@@ -73,12 +69,6 @@ android {
         textReport false
         checkOnly "NewApi", "InlinedApi"
     }
-
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-        options.addStringOption('encoding', 'UTF-8')
-        options.addStringOption('charset', 'UTF-8')
-    }
 }
 
 dependencies {
@@ -90,6 +80,4 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.moandjiezana.toml:toml4j:0.7.2'
     implementation 'com.github.tiann:FreeReflection:3.2.2'
-    
-    // Pine dependency removed
 }
