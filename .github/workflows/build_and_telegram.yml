@@ -23,6 +23,19 @@ jobs:
       run: |
         $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;21.4.7075529"
 
+    - name: FORCE DOWNLOAD MISSING LIBRARIES
+      run: |
+        echo "Downloading BlackReflection AAR and JAR locally..."
+        mkdir -p Bcore/libs
+        # Download the AAR and JAR directly from JitPack to bypass Gradle resolution
+        wget -q https://jitpack.io/com/github/CodingGay/BlackReflection/core/1.1.8/core-1.1.8.aar -O Bcore/libs/core-1.1.8.aar || echo "AAR download failed"
+        wget -q https://jitpack.io/com/github/CodingGay/BlackReflection/compiler/1.1.8/compiler-1.1.8.jar -O Bcore/libs/compiler-1.1.8.jar || echo "JAR download failed"
+        
+        echo "Fixing build.gradle to use local files..."
+        # Replace the remote dependency with local files
+        sed -i 's/implementation "com.github.CodingGay.BlackReflection:core:1.1.8"/implementation files("libs\/core-1.1.8.aar")/' Bcore/build.gradle
+        sed -i 's/annotationProcessor "com.github.CodingGay.BlackReflection:compiler:1.1.8"/annotationProcessor files("libs\/compiler-1.1.8.jar")/' Bcore/build.gradle
+
     - name: Rename BlackBox to Samsung Security
       run: |
         find app/ -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackboxa/com.samsung.android.security/g' {} +
