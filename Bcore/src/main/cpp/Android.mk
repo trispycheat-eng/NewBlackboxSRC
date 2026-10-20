@@ -18,13 +18,11 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-# Collect all source files
 SRC1 := $(wildcard $(LOCAL_PATH)/*.cpp) $(wildcard $(LOCAL_PATH)/*.c)
 SRC2 := $(wildcard $(LOCAL_PATH)/Utils/*.cpp) $(wildcard $(LOCAL_PATH)/Utils/*.c)
 SRC3 := $(wildcard $(LOCAL_PATH)/Hook/*.cpp) $(wildcard $(LOCAL_PATH)/Hook/*.c)
 SRC4 := $(wildcard $(LOCAL_PATH)/JniHook/*.cpp) $(wildcard $(LOCAL_PATH)/JniHook/*.c)
 
-# RENAMED MODULE (Hides from ACE)
 LOCAL_MODULE := system_util
 
 LOCAL_SRC_FILES := BoxCore.cpp \
