@@ -34,8 +34,18 @@ jobs:
         git clone https://github.com/CodingGay/BlackReflection.git
         cd BlackReflection
         
+        echo "Patching build.gradle files to remove dead plugins..."
+        # Remove the ancient Maven plugin that breaks modern Gradle
+        sed -i '/com.github.dcendents.android-maven/d' build.gradle
+        sed -i '/com.github.dcendents.android-maven/d' core/build.gradle
+        sed -i '/com.github.dcendents.android-maven/d' compiler/build.gradle
+        sed -i '/com.jfrog.bintray/d' build.gradle
+        sed -i '/com.jfrog.bintray/d' core/build.gradle
+        sed -i '/com.jfrog.bintray/d' compiler/build.gradle
+        
         echo "Building AAR and JAR..."
-        # Use global gradle, not the repo's broken gradlew
+        chmod +x gradlew
+        # Use the global gradle 7.5 we set up, not their old wrapper
         gradle :core:assembleRelease :compiler:assemble --no-daemon --stacktrace
         
         echo "Copying built files to Bcore/libs..."
