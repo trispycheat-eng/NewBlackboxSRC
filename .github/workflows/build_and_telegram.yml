@@ -19,6 +19,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Install NDK 21 explicitly
+      run: |
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;21.4.7075529"
+
     - name: Rename BlackBox to Samsung Security
       run: |
         echo "Replacing APP package strings..."
