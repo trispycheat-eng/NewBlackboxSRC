@@ -19,16 +19,29 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    # THIS IS THE MAGIC SCRIPT: Renames packages in ALL source files & C++ JNI strings
     - name: Rename BlackBox to Samsung Security
       run: |
-        echo "Replacing Java/Kotlin/XML package names..."
+        echo "Replacing package strings inside files..."
         find . -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" \) -exec sed -i 's/top\.niunaijun\.blackboxa/com.samsung.android.security/g' {} +
         find . -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" \) -exec sed -i 's/top\.niunaijun\.blackbox/com.samsung.android.security/g' {} +
-        
-        echo "Replacing C++ JNI native method registration strings..."
         find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackboxa/com\/samsung\/android\/security/g' {} +
         find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackbox/com\/samsung\/android\/security/g' {} +
+        
+        echo "Replacing library loader name..."
+        find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackbox")/loadLibrary("system_util")/g' {} +
+        find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackboxa")/loadLibrary("system_util")/g' {} +
+        
+        echo "Moving Java folders to match new package name..."
+        if [ -d "Bcore/src/main/java/top" ]; then
+          mkdir -p Bcore/src/main/java/com/samsung/android
+          mv Bcore/src/main/java/top/niunaijun/blackbox Bcore/src/main/java/com/samsung/android/security
+          rm -rf Bcore/src/main/java/top
+        fi
+        if [ -d "app/src/main/java/top" ]; then
+          mkdir -p app/src/main/java/com/samsung/android
+          mv app/src/main/java/top/niunaijun/blackboxa app/src/main/java/com/samsung/android/security
+          rm -rf app/src/main/java/top
+        fi
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
