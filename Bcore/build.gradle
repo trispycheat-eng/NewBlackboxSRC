@@ -4,7 +4,7 @@ android {
     namespace 'com.samsung.android.security.core' 
     compileSdk rootProject.ext.compileSdkVersion
     
-    // THIS IS THE MAGIC LINE: Forces NDK 21 instead of modern NDK 26
+    // Forces the old NDK that supports the engine
     ndkVersion "21.4.7075529"
 
     aidlPackageWhiteList "android/app/IServiceConnection.aidl"
