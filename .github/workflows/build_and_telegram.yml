@@ -23,13 +23,22 @@ jobs:
       run: |
         $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;21.4.7075529"
 
-    - name: FORCE DOWNLOAD MISSING LIBRARIES AS JARS
+    # BUILD BLACKREFLECTION FROM SOURCE TO BYPASS JITPACK ERROR
+    - name: Compile Missing Libraries from Source
       run: |
-        echo "Downloading BlackReflection JARs locally..."
+        echo "Cloning BlackReflection source..."
+        git clone https://github.com/CodingGay/BlackReflection.git
+        cd BlackReflection
+        
+        echo "Building AAR and JAR..."
+        chmod +x gradlew
+        ./gradlew :core:assembleRelease :compiler:assemble --no-daemon
+        
+        echo "Copying built files to Bcore/libs..."
+        cd ..
         mkdir -p Bcore/libs
-        # Download the JAR files instead of AAR to bypass the missing manifest error
-        wget -q https://jitpack.io/com/github/CodingGay/BlackReflection/core/1.1.8/core-1.1.8.jar -O Bcore/libs/core-1.1.8.jar || echo "Core JAR failed"
-        wget -q https://jitpack.io/com/github/CodingGay/BlackReflection/compiler/1.1.8/compiler-1.1.8.jar -O Bcore/libs/compiler-1.1.8.jar || echo "Compiler JAR failed"
+        cp BlackReflection/core/build/outputs/aar/core-release.aar Bcore/libs/core.aar
+        cp BlackReflection/compiler/build/libs/compiler.jar Bcore/libs/compiler.jar
 
     - name: Rename BlackBox to Samsung Security
       run: |
