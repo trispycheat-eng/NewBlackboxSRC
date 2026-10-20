@@ -9,7 +9,15 @@ buildscript {
     }
 }
 
-// REMOVED the allprojects block to stop the Gradle 8 repository clash
+// THIS IS THE MISSING PIECE: Defining the variables for the modules
+ext {
+    compileSdkVersion = 34
+    minSdk = 24
+    targetSdk = 34
+    versionCode = 1
+    versionName = "1.0"
+    blackReflection = '1.1.8'
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
