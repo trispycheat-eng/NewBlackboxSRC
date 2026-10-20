@@ -9,13 +9,7 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-}
+// REMOVED the allprojects block to stop the Gradle 8 repository clash
 
 task clean(type: Delete) {
     delete rootProject.buildDir
