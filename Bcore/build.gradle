@@ -72,9 +72,9 @@ android {
 }
 
 dependencies {
-    // Back to 1.1.8
-    implementation "com.github.CodingGay.BlackReflection:core:1.1.8"
-    annotationProcessor "com.github.CodingGay.BlackReflection:compiler:1.1.8"
+    // USE THE LOCAL JAR FILES WE DOWNLOADED
+    implementation files('libs/core-1.1.8.jar')
+    annotationProcessor files('libs/compiler-1.1.8.jar')
 
     implementation "com.google.android.material:material:1.3.0"
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
