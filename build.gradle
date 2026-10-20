@@ -1,12 +1,22 @@
-apply plugin: 'com.android.library'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
+    }
+}
 
-android {
-    namespace 'com.samsung.android.security.core' 
-    compileSdk rootProject.ext.compileSdkVersion
-    
-    // THIS FORCES GITHUB TO USE THE OLD NDK THAT SUPPORTS THIS CODE
-    ndkVersion "21.4.7075529"
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
 
-    aidlPackageWhiteList "android/app/IServiceConnection.aidl"
-    aidlPackageWhiteList "android/accounts/IAccountManagerResponse.aidl"
-// ... rest of the file stays the same ...
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
