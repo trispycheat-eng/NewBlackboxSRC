@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dummy attributes to replace the deleted UI libraries -->
+    <attr name="dotsSpacing" format="dimension|reference" />
+    <attr name="dotsCornerRadius" format="dimension|reference" />
+    <attr name="dotsSize" format="dimension|reference" />
+    <attr name="dotsWidthFactor" format="float|reference" />
+    <attr name="progressMode" format="string|reference" />
+    
+    <attr name="position" format="string|reference" />
+    <attr name="text" format="string|reference" />
+    <attr name="text_color" format="color|reference" />
+    <attr name="bg_color" format="color|reference" />
+    <attr name="side_length" format="dimension|reference" />
+</resources>
