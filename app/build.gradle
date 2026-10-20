@@ -4,13 +4,10 @@ plugins {
 }
 
 android {
-    // CHANGED PACKAGE NAME
     namespace 'com.samsung.android.security'
-    
     compileSdk 34
 
     defaultConfig {
-        // CHANGED PACKAGE NAME
         applicationId "com.samsung.android.security"
         minSdk 24
         targetSdk 34
@@ -31,7 +28,6 @@ android {
 
     buildTypes {
         release {
-            // MUST BE FALSE OR THE JNI HOOKS WILL BE STRIPPED
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -54,33 +50,24 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
-    
-    // CORE ENGINE
     implementation project(':Bcore')
 
-    // UI DEPENDENCIES
     implementation libs.appcompat
     implementation libs.material
     implementation libs.constraintlayout
     implementation libs.core.ktx
     
-    // TESTING
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    // EXTRA UI DEPENDENCIES FROM ORIGINAL FILE
+    // Only the safe dependencies
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    
     implementation "com.gitee.cbfg5210:RVAdapter:0.3.7"
-    implementation "com.github.OotherShe:CornerLabelView:1.0.0"
-    implementation "com.github.nukc.stateview:kotlin:2.2.0"
-    implementation "com.github.Ferfalk:SimpleSearchView:0.2.0"
-    implementation "com.ftboo:uimono:dotsindicator:4.2"
     implementation "org.osmdroid:osmdroid-android:6.1.11"
     implementation "com.afollestad.material-dialogs:core:3.3.0"
     implementation "com.afollestad.material-dialogs:input:3.3.0"
