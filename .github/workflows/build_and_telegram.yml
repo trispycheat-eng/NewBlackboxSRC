@@ -25,35 +25,23 @@ jobs:
 
     - name: Rename BlackBox to Samsung Security
       run: |
-        echo "Replacing APP package strings..."
         find app/ -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackboxa/com.samsung.android.security/g' {} +
-        
-        echo "Replacing CORE package strings..."
         find Bcore/ -type f \( -name "*.java" -o -name "*.kt" -o -name "*.xml" -o -name "*.aidl" \) -exec sed -i 's/top\.niunaijun\.blackbox/com.samsung.android.security.core/g' {} +
-        
-        echo "Replacing C++ JNI strings..."
         find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackboxa/com\/samsung\/android\/security/g' {} +
         find . -type f \( -name "*.cpp" -o -name "*.h" \) -exec sed -i 's/top\/niunaijun\/blackbox/com\/samsung\/android\/security\/core/g' {} +
-        
-        echo "Replacing library loader name..."
         find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackbox")/loadLibrary("system_util")/g' {} +
         find . -type f -name "*.java" -exec sed -i 's/loadLibrary("blackboxa")/loadLibrary("system_util")/g' {} +
         
-        echo "Moving APP folders..."
         if [ -d "app/src/main/java/top" ]; then
           mkdir -p app/src/main/java/com/samsung/android
           mv app/src/main/java/top/niunaijun/blackboxa app/src/main/java/com/samsung/android/security
           rm -rf app/src/main/java/top
         fi
-
-        echo "Moving CORE folders..."
         if [ -d "Bcore/src/main/java/top" ]; then
           mkdir -p Bcore/src/main/java/com/samsung/android/security
           mv Bcore/src/main/java/top/niunaijun/blackbox Bcore/src/main/java/com/samsung/android/security/core
           rm -rf Bcore/src/main/java/top
         fi
-
-        echo "Moving AIDL folders..."
         if [ -d "Bcore/src/main/aidl/top" ]; then
           mkdir -p Bcore/src/main/aidl/com/samsung/android/security
           mv Bcore/src/main/aidl/top/niunaijun/blackbox Bcore/src/main/aidl/com/samsung/android/security/core
@@ -63,8 +51,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace
+    - name: Build Debug APK (Filtering Errors)
+      run: |
+        ./gradlew assembleDebug --no-daemon > build_log.txt 2>&1 || true
+        echo "=============== ERROR LOG ==============="
+        grep -i -E "error:|what went wrong|Caused by:" build_log.txt -A 5 -B 2 || echo "No specific error found, check full log."
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
